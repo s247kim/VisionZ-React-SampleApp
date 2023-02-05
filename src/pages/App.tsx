@@ -1,10 +1,6 @@
-import { PropsWithChildren } from "react";
+import { FC } from "react";
+import { MainPage } from "./main.page";
 
-type AppProps = {
-    // ...
-};
-
-export const App = (props: PropsWithChildren<AppProps>) => {
-
-    return <>Hello World</>;
+export const App: FC = () => {
+    return <><MainPage/></>;
 };

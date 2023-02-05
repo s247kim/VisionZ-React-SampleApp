@@ -1,0 +1,17 @@
+@use '../style-mixins/responsive';
+
+.mainPage {
+  min-width: 250px;
+  margin: 1.5rem;
+
+  @include responsive.width("sm") {
+    width: 80%;
+    margin: auto;
+  }
+
+  @include responsive.width("md") {
+    width: 75%;
+    margin: auto;
+  }
+}
+
