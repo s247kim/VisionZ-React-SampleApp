@@ -1,9 +1,9 @@
 import { FC } from "react";
 
-import styles from "./main.module.scss";
+import styles from "./todoMain.styles.module.scss";
 import { TodoGroupCollection } from "../components/todoGroupCollection";
 
-export const MainPage: FC = () => {
+export const TodoMainPage: FC = () => {
     return (
         <div className={styles.mainPage}>
             <header>

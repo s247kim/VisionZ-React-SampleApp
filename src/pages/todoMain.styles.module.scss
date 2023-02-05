@@ -1,0 +1,17 @@
+@use '../style-mixins/responsive';
+
+.mainPage {
+  padding: 1.5rem;
+  margin: auto;
+  min-width: 350px;
+  max-width: #{map-get(responsive.$width-map, "sm")};
+
+  @include responsive.width("md") {
+    max-width: #{map-get(responsive.$width-map, "sm") * 2};
+  }
+
+  @include responsive.width("lg") {
+    max-width: #{map-get(responsive.$width-map, "sm") * 3};
+  }
+}
+

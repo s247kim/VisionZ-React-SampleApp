@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { MainPage } from "./main.page";
+import { TodoMainPage } from "./todoMain.page";
 
 export const App: FC = () => {
-    return <><MainPage/></>;
+    return <><TodoMainPage/></>;
 };

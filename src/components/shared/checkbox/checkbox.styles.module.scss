@@ -1,0 +1,22 @@
+.checkbox {
+  display: inline-block;
+  position: relative;
+  top: 0.2em;
+  width: 1em;
+  height: 1em;
+  margin: 0 0.5em;
+
+  border-radius: 30%;
+  border: 2px solid #4d4d4d;
+
+  :global {
+    .checker {
+      width: 90%;
+      height: 90%;
+      border-radius: 30%;
+      margin: 5%;
+
+      background-color: #5e5e5e;
+    }
+  }
+}

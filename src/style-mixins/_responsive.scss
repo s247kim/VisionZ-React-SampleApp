@@ -1,9 +1,9 @@
-$width-map: ("sm": 480, "md": 720, "lg": 1024);
+$width-map: ("sm": 480px, "md": 720px, "lg": 1024px);
 
 @mixin width($width-key) {
   $width: map-get($width-map, $width-key);
 
-  @media screen and (min-width: #{$width}px) {
+  @media screen and (min-width: #{$width}) {
     @content;
   }
 }
