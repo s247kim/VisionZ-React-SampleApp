@@ -3,4 +3,31 @@
 
   display: grid;
   row-gap: .5rem;
+
+  &.completed {
+    opacity: 40%;
+    text-decoration: line-through;
+  }
+
+  :global {
+    .todo-item-container {
+      display: flex;
+    }
+
+    input.todo-item-text {
+      width: 100%;
+      font-size: inherit;
+      border: {
+        top: none;
+        right: none;
+        left: none;
+        bottom: 2px solid transparent;
+      }
+
+      &:focus {
+        outline: none;
+        border-bottom: 2px solid #673ab7;
+      }
+    }
+  }
 }

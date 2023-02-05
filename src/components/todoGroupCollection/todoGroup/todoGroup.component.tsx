@@ -8,9 +8,15 @@ type TodoGroupProps = Omit<TodoGroupType, "groupId">
 
 export const TodoGroup: FC<TodoGroupProps> = ({ groupTitle, incompleteList, completedList }) => {
     return <article className={styles.todoGroup}>
-        <h2 className={"todo-title"}>{groupTitle}</h2>
+        <input type={"text"} className={"todo-title"} value={groupTitle}/>
 
         <TodoItemList todoItemList={incompleteList}/>
-        <TodoItemList todoItemList={completedList} completed/>
+
+        {!!completedList.length &&
+            <>
+                <hr/>
+                <TodoItemList todoItemList={completedList} completed/>
+            </>
+        }
     </article>;
 };

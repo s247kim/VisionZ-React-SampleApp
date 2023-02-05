@@ -11,10 +11,9 @@ type TodoItemListProps = {
 };
 
 export const TodoItemList: FC<TodoItemListProps> = ({ completed: isCompleted, todoItemList }) => {
-
-    return <div className={styles.todoItemList}>
+    return <div className={[styles.todoItemList, isCompleted ? styles.completed : "incomplete"].join(" ")}>
         {todoItemList?.map(({ itemId, itemDetail }) => {
-            return <div key={itemId} className={"todo-item-container"}>
+            return <div key={itemId} className={`todo-item-container`}>
                 <Checkbox checked={isCompleted}/>
                 <TodoItem itemDetail={itemDetail}/>
             </div>;
