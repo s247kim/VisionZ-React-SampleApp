@@ -53,7 +53,7 @@ export const TodoGroup: FC<TodoGroupProps> = ({
                onChange={(event) => changeGroupTitle(event.target.value)}
                onKeyDown={(e) => e.code.toLowerCase() === "enter" && createNewItem()}/>
 
-        <div className="todo-list-wrapper">
+        <div className="todo-list-wrapper" onClick={() => !incompleteList.length && createNewItem()}>
             <TodoItemList todoItemList={incompleteList} todoGroupId={groupId} setGroupDetails={setGroupDetails}/>
 
             {!!completedList.length &&

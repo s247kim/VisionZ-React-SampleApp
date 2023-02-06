@@ -4,6 +4,7 @@ import { Dispatch, FC, SetStateAction } from "react";
 import styles from "./todoItemList.styles.module.scss";
 import { Checkbox } from "../../../shared/checkbox";
 import { TodoItem } from "./todoItem.component";
+import { v4 } from "uuid";
 
 type TodoItemListProps = {
     completed?: boolean
@@ -33,6 +34,40 @@ export const TodoItemList: FC<TodoItemListProps> = ({
         });
     };
 
+    const deleteDetail = (itemId: string) => {
+        setGroupDetails(state => state.map(groupDetail => {
+            if (groupDetail.groupId === todoGroupId) {
+                if (isCompleted) {
+                    groupDetail.completedList = groupDetail.completedList.filter(x => x.itemId !== itemId);
+                } else {
+                    groupDetail.incompleteList = groupDetail.incompleteList.filter(x => x.itemId !== itemId);
+                }
+            }
+
+            return groupDetail;
+        }));
+    };
+
+    const addDetail = () => {
+        setGroupDetails(state => state.map(groupDetail => {
+            if (groupDetail.groupId === todoGroupId) {
+                if (isCompleted) {
+                    groupDetail.completedList = [...groupDetail.completedList, {
+                        itemId: v4().toString(),
+                        itemDetail: ""
+                    }];
+                } else {
+                    groupDetail.incompleteList = [...groupDetail.incompleteList, {
+                        itemId: v4().toString(),
+                        itemDetail: ""
+                    }];
+                }
+            }
+
+            return groupDetail;
+        }));
+    };
+
     const changeCompletionStatus = (itemId: string, isChecked: boolean) => {
         setGroupDetails(state => {
             const groupDetail = state.find(x => x.groupId === todoGroupId);
@@ -52,12 +87,14 @@ export const TodoItemList: FC<TodoItemListProps> = ({
     };
 
     return <div className={[styles.todoItemList, isCompleted ? styles.completed : "incomplete"].join(" ")}>
-        {todoItemList?.map(({ itemId, itemDetail }) => {
+        {todoItemList?.map(({ itemId, itemDetail }, index) => {
             return <div key={itemId} className={`todo-item-container`}>
                 <Checkbox disabled={!itemDetail.trim()} checked={isCompleted}
                           handleCheckedStateChange={changeCompletionStatus.bind(null, itemId)}/>
                 <TodoItem itemDetail={itemDetail} completed={isCompleted} autoFocus={!itemDetail}
-                          handleItemDetailChange={changeDetail.bind(null, itemId)}/>
+                          handleItemDetailChange={changeDetail.bind(null, itemId)}
+                          handleItemDelete={deleteDetail.bind(null, itemId)}
+                          handleItemAdd={() => todoItemList.length === index + 1 && addDetail()}/>
             </div>;
         })}
     </div>;

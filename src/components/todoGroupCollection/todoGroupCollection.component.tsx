@@ -12,13 +12,7 @@ const testData: TodoGroupType[] = [
         incompleteList: [{ itemId: v4().toString(), itemDetail: "test Incomplete" }, {
             itemId: v4().toString(),
             itemDetail: "test Incomplete2"
-        }, { itemId: v4().toString(), itemDetail: "test Incomplete" }, {
-            itemId: v4().toString(),
-            itemDetail: "test Incomplete"
-        }, { itemId: v4().toString(), itemDetail: "test Incomplete" }, {
-            itemId: v4().toString(),
-            itemDetail: "test Incomplete"
-        }, { itemId: v4().toString(), itemDetail: "test Incomplete" },],
+        }],
         completedList: [{ itemId: v4().toString(), itemDetail: "test Completed" }, {
             itemId: v4().toString(),
             itemDetail: "test Completed2"
