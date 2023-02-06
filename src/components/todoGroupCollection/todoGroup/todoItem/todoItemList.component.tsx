@@ -36,9 +36,9 @@ export const TodoItemList: FC<TodoItemListProps> = ({
     return <div className={[styles.todoItemList, isCompleted ? styles.completed : "incomplete"].join(" ")}>
         {todoItemList?.map(({ itemId, itemDetail }) => {
             return <div key={itemId} className={`todo-item-container`}>
-                <Checkbox disabled={!itemDetail} checked={isCompleted}
+                <Checkbox disabled={!itemDetail.trim()} checked={isCompleted}
                           handleCheckedStateChange={() => console.log("hello")}/>
-                <TodoItem itemDetail={itemDetail} completed={isCompleted}
+                <TodoItem itemDetail={itemDetail} completed={isCompleted} autoFocus={!itemDetail}
                           handleItemDetailChange={changeDetail.bind(null, itemId)}/>
             </div>;
         })}

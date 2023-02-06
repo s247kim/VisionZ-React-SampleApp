@@ -3,12 +3,14 @@ import { TodoItemType } from "../../todoGroupCollection.types";
 
 type TodoItemProps = Omit<TodoItemType, "itemId"> & {
     completed?: boolean;
+    autoFocus?: boolean;
     handleItemDetailChange: (newDetail: string) => void;
 };
 
 export const TodoItem = forwardRef<HTMLInputElement, TodoItemProps>(({
                                                                          itemDetail,
                                                                          completed: isCompleted,
+                                                                         autoFocus,
                                                                          handleItemDetailChange
                                                                      }, ref) => {
     const changeItemDetail = (newDetail: string) => {
@@ -17,6 +19,6 @@ export const TodoItem = forwardRef<HTMLInputElement, TodoItemProps>(({
         }
     };
 
-    return <input ref={ref} className={"todo-item-text"} value={itemDetail}
+    return <input ref={ref} className={"todo-item-text"} value={itemDetail} autoFocus={autoFocus}
                   onChange={event => changeItemDetail(event.target.value)} disabled={isCompleted}/>;
 });

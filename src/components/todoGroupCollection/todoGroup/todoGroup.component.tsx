@@ -3,6 +3,7 @@ import { Dispatch, FC, SetStateAction } from "react";
 import styles from "./todoGroup.styles.module.scss";
 import { TodoGroupType } from "../todoGroupCollection.types";
 import { TodoItemList } from "./todoItem";
+import { v4 } from "uuid";
 
 type TodoGroupProps = TodoGroupType & {
     setGroupDetails: Dispatch<SetStateAction<TodoGroupType[]>>;
@@ -30,18 +31,37 @@ export const TodoGroup: FC<TodoGroupProps> = ({
 
     const shouldAutoFocus = !groupTitle && !incompleteList.length && !completedList.length;
 
+    const createNewItem = () => {
+        if (!incompleteList.length) {
+            setGroupDetails(state => {
+                const groupDetail = state.find(x => x.groupId === groupId);
+                if (groupDetail) {
+                    groupDetail.incompleteList = [{
+                        itemId: v4().toString(),
+                        itemDetail: ""
+                    }];
+                    return [...state];
+                }
+
+                return state;
+            });
+        }
+    };
+
     return <article className={styles.todoGroup}>
         <input type={"text"} className={"todo-title"} value={groupTitle} autoFocus={shouldAutoFocus}
                onChange={(event) => changeGroupTitle(event.target.value)}/>
 
-        <TodoItemList todoItemList={incompleteList} todoGroupId={groupId} setGroupDetails={setGroupDetails}/>
+        <div className="todo-list-wrapper" onClick={createNewItem}>
+            <TodoItemList todoItemList={incompleteList} todoGroupId={groupId} setGroupDetails={setGroupDetails}/>
 
-        {!!completedList.length &&
-            <>
-                <hr/>
-                <TodoItemList todoItemList={completedList} todoGroupId={groupId} setGroupDetails={setGroupDetails}
-                              completed/>
-            </>
-        }
+            {!!completedList.length &&
+                <>
+                    <hr/>
+                    <TodoItemList todoItemList={completedList} todoGroupId={groupId} setGroupDetails={setGroupDetails}
+                                  completed/>
+                </>
+            }
+        </div>
     </article>;
 };

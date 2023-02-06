@@ -15,7 +15,7 @@ export const Checkbox: FC<CheckboxProps> = ({ checked: isChecked, disabled: isDi
         }
     };
 
-    return <span className={styles.checkbox} onClick={changeCheckedState}>
+    return <span className={[styles.checkbox, isDisabled ? styles.disabled : ""].join(" ")} onClick={changeCheckedState}>
         {isChecked && <div className={"checker"}></div>}
     </span>;
 };
