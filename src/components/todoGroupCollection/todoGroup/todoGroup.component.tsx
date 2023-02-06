@@ -32,27 +32,28 @@ export const TodoGroup: FC<TodoGroupProps> = ({
     const shouldAutoFocus = !groupTitle && !incompleteList.length && !completedList.length;
 
     const createNewItem = () => {
-        if (!incompleteList.length) {
-            setGroupDetails(state => {
-                const groupDetail = state.find(x => x.groupId === groupId);
-                if (groupDetail) {
-                    groupDetail.incompleteList = [{
-                        itemId: v4().toString(),
-                        itemDetail: ""
-                    }];
-                    return [...state];
+        setGroupDetails(state => {
+            return state.map(groupDetail => {
+                if (groupDetail.groupId === groupId) {
+                    return {
+                        ...groupDetail,
+                        incompleteList: [...groupDetail.incompleteList, {
+                            itemId: v4().toString(),
+                            itemDetail: ""
+                        }]
+                    };
                 }
-
-                return state;
+                return groupDetail;
             });
-        }
+        });
     };
 
     return <article className={styles.todoGroup}>
         <input type={"text"} className={"todo-title"} value={groupTitle} autoFocus={shouldAutoFocus}
-               onChange={(event) => changeGroupTitle(event.target.value)}/>
+               onChange={(event) => changeGroupTitle(event.target.value)}
+               onKeyDown={(e) => e.code.toLowerCase() === "enter" && createNewItem()}/>
 
-        <div className="todo-list-wrapper" onClick={createNewItem}>
+        <div className="todo-list-wrapper">
             <TodoItemList todoItemList={incompleteList} todoGroupId={groupId} setGroupDetails={setGroupDetails}/>
 
             {!!completedList.length &&
