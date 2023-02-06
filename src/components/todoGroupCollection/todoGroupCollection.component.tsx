@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { v4 } from "uuid";
 
 import styles from "./todoGroupCollection.styles.module.scss";
-import { TodoGroup } from "./todoGroup";
+import { EmptyTodoGroup, TodoGroup } from "./todoGroup";
 import { TodoGroupType } from "./todoGroupCollection.types";
 
 const testData: TodoGroupType[] = [
@@ -19,9 +19,7 @@ const testData: TodoGroupType[] = [
         }]
     },
     { groupId: v4().toString(), groupTitle: "test2", incompleteList: [], completedList: [] },
-    { groupId: v4().toString(), groupTitle: "test3", incompleteList: [], completedList: [] },
-    { groupId: v4().toString(), groupTitle: "test4", incompleteList: [], completedList: [] },
-    { groupId: v4().toString(), groupTitle: "test5", incompleteList: [], completedList: [] },
+    { groupId: v4().toString(), groupTitle: "test3", incompleteList: [], completedList: [] }
 ];
 
 export const TodoGroupCollection: FC = () => {
@@ -32,5 +30,6 @@ export const TodoGroupCollection: FC = () => {
             return <TodoGroup key={groupId} groupTitle={groupTitle} incompleteList={incompleteList}
                               completedList={completedList}/>;
         })}
+        <EmptyTodoGroup/>
     </section>;
 };

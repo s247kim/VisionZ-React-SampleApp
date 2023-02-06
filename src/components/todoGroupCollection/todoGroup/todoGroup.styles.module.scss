@@ -1,7 +1,9 @@
+$box-shadow-properties: 3px 3px 5px #7a7a7a;
+
 .todoGroup {
   border: 1px solid black;
   border-radius: 0.4rem;
-  box-shadow: 3px 3px 5px #7a7a7a;
+  box-shadow: $box-shadow-properties;
 
   display: grid;
   row-gap: 1rem;
@@ -25,5 +27,29 @@
       margin: 0;
       border-top: 1px dashed black;
     }
+  }
+}
+
+.emptyTodoGroup {
+  opacity: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+
+  &:after {
+    content: "+";
+    font-size: 10rem;
+    font-weight: lighter;
+  }
+
+  &:hover {
+    opacity: 60%;
+  }
+
+  &:active {
+    opacity: 100%;
+    box-shadow: inset $box-shadow-properties;
   }
 }
