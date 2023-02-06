@@ -14,6 +14,11 @@
     cursor: not-allowed;
   }
 
+  &:not(.disabled):focus {
+    border-width: 5px;
+    border-color: #425959;
+  }
+
   :global {
     .checker {
       width: 90%;
