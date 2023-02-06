@@ -2,7 +2,12 @@ import { FC } from "react";
 
 import styles from "./todoGroup.styles.module.scss";
 
-export const EmptyTodoGroup: FC = () => {
+type EmptyTodoGroupProps = {
+    handleClick: () => void;
+}
 
-    return <article className={[styles.todoGroup, styles.emptyTodoGroup].join(" ")}></article>;
+export const EmptyTodoGroup: FC<EmptyTodoGroupProps> = ({ handleClick }) => {
+
+    return <article className={[styles.todoGroup, styles.emptyTodoGroup].join(" ")}
+                    onClick={handleClick}></article>;
 };

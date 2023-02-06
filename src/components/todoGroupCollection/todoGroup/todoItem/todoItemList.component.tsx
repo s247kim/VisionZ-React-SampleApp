@@ -1,5 +1,5 @@
-import { TodoItemType } from "../../todoGroupCollection.types";
-import { FC, useEffect, useRef } from "react";
+import { TodoGroupType, TodoItemType } from "../../todoGroupCollection.types";
+import { Dispatch, FC, SetStateAction } from "react";
 
 import styles from "./todoItemList.styles.module.scss";
 import { Checkbox } from "../../../shared/checkbox";
@@ -8,32 +8,38 @@ import { TodoItem } from "./todoItem.component";
 type TodoItemListProps = {
     completed?: boolean
     todoItemList: TodoItemType[];
+    todoGroupId: string;
+    setGroupDetails: Dispatch<SetStateAction<TodoGroupType[]>>;
 };
 
-export const TodoItemList: FC<TodoItemListProps> = ({ completed: isCompleted, todoItemList }) => {
-    const firstEmptyInputRef = useRef<HTMLInputElement>(null);
-    const isEmpty = !isCompleted && todoItemList.length === 0;
+export const TodoItemList: FC<TodoItemListProps> = ({
+                                                        completed: isCompleted,
+                                                        todoItemList,
+                                                        todoGroupId,
+                                                        setGroupDetails
+                                                    }) => {
+    const changeDetail = (itemId: string, newDetail: string) => {
+        setGroupDetails(state => {
+            const groupDetail = state.find(x => x.groupId === todoGroupId);
+            if (groupDetail) {
+                const item = groupDetail.incompleteList.find(x => x.itemId === itemId);
+                if (item) {
+                    item.itemDetail = newDetail;
+                    return [...state];
+                }
+            }
 
-    useEffect(() => {
-        if (isEmpty) {
-            firstEmptyInputRef.current?.focus();
-        }
-    }, [isEmpty]);
-
-    if (isEmpty) {
-        return <div className={styles.todoItemList}>
-            <div className={`todo-item-container`}>
-                <Checkbox/>
-                <TodoItem ref={firstEmptyInputRef} itemDetail={""}/>
-            </div>
-        </div>;
-    }
+            return state;
+        });
+    };
 
     return <div className={[styles.todoItemList, isCompleted ? styles.completed : "incomplete"].join(" ")}>
         {todoItemList?.map(({ itemId, itemDetail }) => {
             return <div key={itemId} className={`todo-item-container`}>
-                <Checkbox checked={isCompleted}/>
-                <TodoItem itemDetail={itemDetail} completed={isCompleted}/>
+                <Checkbox disabled={!itemDetail} checked={isCompleted}
+                          handleCheckedStateChange={() => console.log("hello")}/>
+                <TodoItem itemDetail={itemDetail} completed={isCompleted}
+                          handleItemDetailChange={changeDetail.bind(null, itemId)}/>
             </div>;
         })}
     </div>;
