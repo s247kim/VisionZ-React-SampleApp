@@ -33,11 +33,29 @@ export const TodoItemList: FC<TodoItemListProps> = ({
         });
     };
 
+    const changeCompletionStatus = (itemId: string, isChecked: boolean) => {
+        setGroupDetails(state => {
+            const groupDetail = state.find(x => x.groupId === todoGroupId);
+            if (groupDetail) {
+                // if the new state is checked -> find item from incompleteList and put it to completedList
+                const list = isChecked ? groupDetail.incompleteList : groupDetail.completedList;
+                const itemIndex = list.findIndex(x => x.itemId === itemId);
+                if (itemIndex > -1) {
+                    isChecked ? groupDetail.completedList.push(list[itemIndex]) : groupDetail.incompleteList.push(list[itemIndex]);
+                    list.splice(itemIndex, 1);
+                    return [...state];
+                }
+            }
+
+            return state;
+        });
+    };
+
     return <div className={[styles.todoItemList, isCompleted ? styles.completed : "incomplete"].join(" ")}>
         {todoItemList?.map(({ itemId, itemDetail }) => {
             return <div key={itemId} className={`todo-item-container`}>
                 <Checkbox disabled={!itemDetail.trim()} checked={isCompleted}
-                          handleCheckedStateChange={() => console.log("hello")}/>
+                          handleCheckedStateChange={changeCompletionStatus.bind(null, itemId)}/>
                 <TodoItem itemDetail={itemDetail} completed={isCompleted} autoFocus={!itemDetail}
                           handleItemDetailChange={changeDetail.bind(null, itemId)}/>
             </div>;
