@@ -25,10 +25,18 @@ const testData: TodoGroupType[] = [
 export const TodoGroupCollection: FC = () => {
     const [groupDetails, setGroupDetails] = useState<TodoGroupType[]>(testData);
 
+    const changeGroupTitle = (groupId: string, newTitle: string): void => {
+        const groupDetail = groupDetails.find(x => x.groupId === groupId);
+        if (groupDetail) {
+            groupDetail.groupTitle = newTitle;
+            setGroupDetails([...groupDetails]);
+        }
+    }
+
     return <section className={styles.todoGroupCollection}>
         {groupDetails.map(({ groupId, groupTitle, incompleteList, completedList }) => {
             return <TodoGroup key={groupId} groupTitle={groupTitle} incompleteList={incompleteList}
-                              completedList={completedList}/>;
+                              completedList={completedList} changeGroupTitle={changeGroupTitle.bind(null, groupId)}/>;
         })}
         <EmptyTodoGroup/>
     </section>;

@@ -12,7 +12,6 @@ type TodoItemListProps = {
 
 export const TodoItemList: FC<TodoItemListProps> = ({ completed: isCompleted, todoItemList }) => {
     const firstEmptyInputRef = useRef<HTMLInputElement>(null);
-
     const isEmpty = !isCompleted && todoItemList.length === 0;
 
     useEffect(() => {
