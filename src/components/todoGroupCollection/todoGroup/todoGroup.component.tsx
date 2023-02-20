@@ -1,66 +1,54 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import { ChangeEventHandler, FC, KeyboardEventHandler } from "react";
 
 import styles from "./todoGroup.styles.module.scss";
-import { TodoGroupType } from "../todoGroupCollection.types";
 import { TodoItemList } from "./todoItem";
-import { v4 } from "uuid";
+import { TodoGroupType, useTodoManageAction } from "../../../contexts/todoManage";
 
 type TodoGroupProps = TodoGroupType & {
-    setGroupDetails: Dispatch<SetStateAction<TodoGroupType[]>>;
-};
+    groupId: string;
+}
 
+/**
+ * 상위 컴포넌트에서 이렇게 props 넘겨 받은걸 다시 하위로 넣는걸 prop drilling 이라 생각해서 context 를 쓰려할 수 있음
+ * 하지만 이 경우에는 하위에 리스팅된 모든 컴포넌트에 context 를 붙이는 것 보다 이런식으로 상위에서 골라 넘겨주는게 optimization 이 용이함
+ * context 를 모든 하위 컴포넌트에 붙이면, re-render 를 막을 방도가 없음
+ */
 export const TodoGroup: FC<TodoGroupProps> = ({
                                                   groupId,
-                                                  groupTitle,
-                                                  incompleteList,
-                                                  completedList,
-                                                  setGroupDetails
+                                                  groupName,
+                                                  complete,
+                                                  incomplete
                                               }) => {
+    const todoManageAction = useTodoManageAction();
+    const shouldAutoFocus = !groupName && !incomplete.size && !complete.size;
 
-    const changeGroupTitle = (newTitle: string): void => {
-        setGroupDetails(state => {
-            const groupDetail = state.find(x => x.groupId === groupId);
-            if (groupDetail) {
-                groupDetail.groupTitle = newTitle;
-                return [...state];
-            }
-
-            return state;
-        });
+    const changeGroupName: ChangeEventHandler<HTMLInputElement> = (e) => {
+        todoManageAction({ type: "changeGroupName", value: { groupId, groupName: e.target.value } });
     };
 
-    const shouldAutoFocus = !groupTitle && !incompleteList.length && !completedList.length;
+    const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+        if (e.code.toLowerCase() === "enter") {
+            todoManageAction({ type: "createNewItem", value: { groupId } });
+        }
+    };
 
-    const createNewItem = () => {
-        setGroupDetails(state => {
-            return state.map(groupDetail => {
-                if (groupDetail.groupId === groupId) {
-                    return {
-                        ...groupDetail,
-                        incompleteList: [...groupDetail.incompleteList, {
-                            itemId: v4().toString(),
-                            itemDetail: ""
-                        }]
-                    };
-                }
-                return groupDetail;
-            });
-        });
+    const createNewItemIfEmpty = () => {
+        if (!incomplete.size) {
+            todoManageAction({ type: "createNewItem", value: { groupId } });
+        }
     };
 
     return <article className={styles.todoGroup}>
-        <input type={"text"} className={"todo-title"} value={groupTitle} autoFocus={shouldAutoFocus}
-               onChange={(event) => changeGroupTitle(event.target.value)}
-               onKeyDown={(e) => e.code.toLowerCase() === "enter" && createNewItem()}/>
+        <input type={"text"} className={"todo-title"} value={groupName} autoFocus={shouldAutoFocus}
+               onChange={changeGroupName} onKeyDown={handleKeyDown}/>
 
-        <div className="todo-list-wrapper" onClick={() => !incompleteList.length && createNewItem()}>
-            <TodoItemList todoItemList={incompleteList} todoGroupId={groupId} setGroupDetails={setGroupDetails}/>
+        <div className="todo-list-wrapper" onClick={createNewItemIfEmpty}>
+            <TodoItemList todoItems={incomplete} groupId={groupId}/>
 
-            {!!completedList.length &&
+            {!!complete.size &&
                 <>
                     <hr/>
-                    <TodoItemList todoItemList={completedList} todoGroupId={groupId} setGroupDetails={setGroupDetails}
-                                  completed/>
+                    <TodoItemList todoItems={complete} groupId={groupId} completed/>
                 </>
             }
         </div>

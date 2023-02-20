@@ -1,4 +1,4 @@
-import { FC, KeyboardEvent } from "react";
+import { FC, KeyboardEvent, MouseEventHandler, } from "react";
 
 import styles from "./checkbox.styles.module.scss";
 
@@ -9,7 +9,8 @@ type CheckboxProps = {
 }
 
 export const Checkbox: FC<CheckboxProps> = ({ checked: isChecked, disabled: isDisabled, handleCheckedStateChange }) => {
-    const changeCheckedState = () => {
+    const changeCheckedState: MouseEventHandler<HTMLSpanElement> = (event) => {
+        event.stopPropagation();
         if (!isDisabled && handleCheckedStateChange) {
             handleCheckedStateChange(!isChecked);
         }

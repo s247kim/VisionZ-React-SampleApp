@@ -1,34 +1,39 @@
-import { forwardRef } from "react";
-import { TodoItemType } from "../../todoGroupCollection.types";
+import { ChangeEventHandler, forwardRef, KeyboardEventHandler } from "react";
 
-type TodoItemProps = Omit<TodoItemType, "itemId"> & {
+import { useTodoManageAction } from "../../../../contexts/todoManage";
+
+type TodoItemProps = {
     completed?: boolean;
     autoFocus?: boolean;
-    handleItemDetailChange: (newDetail: string) => void;
-    handleItemDelete: () => void;
-    handleItemAdd: () => void;
+
+    groupId: string;
+    itemId: string;
+    itemText: string;
 };
 
 export const TodoItem = forwardRef<HTMLInputElement, TodoItemProps>(({
-                                                                         itemDetail,
                                                                          completed: isCompleted,
                                                                          autoFocus,
-                                                                         handleItemDetailChange,
-                                                                         handleItemDelete,
-                                                                         handleItemAdd
+                                                                         groupId,
+                                                                         itemId,
+                                                                         itemText
                                                                      }, ref) => {
-    const changeItemDetail = (newDetail: string) => {
-        if (!isCompleted) {
-            handleItemDetailChange(newDetail);
-        }
+    const todoManageAction = useTodoManageAction();
+
+    const changeItemDetail: ChangeEventHandler<HTMLInputElement> = (event) => {
+        todoManageAction({ type: "changeTodoItemText", value: { groupId, itemId, text: event.target.value } });
     };
 
     const deleteIfEmpty = () => {
-        if (!itemDetail) handleItemDelete();
+        if (!itemText) todoManageAction({ type: "deleteTodoItem", value: { groupId, itemId } });
     };
 
-    return <input ref={ref} className={"todo-item-text"} value={itemDetail} autoFocus={autoFocus}
-                  onChange={event => changeItemDetail(event.target.value)} disabled={isCompleted}
-                  onBlur={deleteIfEmpty}
-                  onKeyDown={(e) => e.code.toLowerCase() === "enter" && handleItemAdd()}/>;
+    const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+        if (e.code.toLowerCase() === "enter") {
+            todoManageAction({ type: "createNewItem", value: { groupId } });
+        }
+    };
+
+    return <input ref={ref} className={"todo-item-text"} value={itemText} autoFocus={autoFocus}
+                  onChange={changeItemDetail} disabled={isCompleted} onBlur={deleteIfEmpty} onKeyDown={handleKeyDown}/>;
 });

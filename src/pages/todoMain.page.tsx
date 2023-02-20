@@ -2,6 +2,7 @@ import { FC } from "react";
 
 import styles from "./todoMain.styles.module.scss";
 import { TodoGroupCollection } from "../components/todoGroupCollection";
+import { TodoManageProvider } from "../contexts/todoManage";
 
 export const TodoMainPage: FC = () => {
     return (
@@ -11,7 +12,9 @@ export const TodoMainPage: FC = () => {
             </header>
 
             <main>
-                <TodoGroupCollection/>
+                <TodoManageProvider>
+                    <TodoGroupCollection/>
+                </TodoManageProvider>
             </main>
         </div>
     );
