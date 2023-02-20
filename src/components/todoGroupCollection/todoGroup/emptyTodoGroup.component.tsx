@@ -18,3 +18,5 @@ export const EmptyTodoGroup: FC<EmptyTodoGroupProps> = memo(() => {
     return <article className={[styles.todoGroup, styles.emptyTodoGroup].join(" ")}
                     onClick={() => todoManageAction({ type: "createNewGroup" })}></article>;
 });
+
+EmptyTodoGroup.displayName = "memo(EmptyTodoGroup)";

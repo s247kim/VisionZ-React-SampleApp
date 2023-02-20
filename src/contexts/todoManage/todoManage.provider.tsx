@@ -4,7 +4,9 @@ import { initTodoManageStore, TodoManageAction, TodoManageStore } from "./todoMa
 import { todoManageReducer } from "./todoManage.reducer";
 
 const TodoManageActionContext = createContext<Dispatch<TodoManageAction> | undefined>(undefined);
+TodoManageActionContext.displayName = "TodoManageActionContext";
 const TodoManageStoreContext = createContext<TodoManageStore | undefined>(undefined);
+TodoManageStoreContext.displayName = "TodoManageStoreContext";
 
 export const useTodoManageAction = (): Dispatch<TodoManageAction> => {
     const context = useContext(TodoManageActionContext);
@@ -31,3 +33,5 @@ export const TodoManageProvider: FC<PropsWithChildren> = ({ children }) => {
         </TodoManageActionContext.Provider>
     );
 };
+
+TodoManageProvider.displayName = "TodoManageProvider";

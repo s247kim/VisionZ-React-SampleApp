@@ -38,3 +38,5 @@ export const TodoItemList: FC<TodoItemListProps> = ({
         {TodoItemComponentList}
     </div>;
 };
+
+TodoItemList.displayName = "TodoItemList";

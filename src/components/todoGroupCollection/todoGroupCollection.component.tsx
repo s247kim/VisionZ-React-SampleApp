@@ -19,3 +19,5 @@ export const TodoGroupCollection: FC = () => {
         <EmptyTodoGroup/>
     </section>;
 };
+
+TodoGroupCollection.displayName = "TodoGroupCollection";

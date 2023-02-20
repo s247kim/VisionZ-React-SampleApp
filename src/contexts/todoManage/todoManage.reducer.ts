@@ -17,7 +17,10 @@ export const todoManageReducer: TodoManageReducer = (state, action) => {
             const group = nextState.get(groupId);
             if (!group) break;
 
-            group.incomplete.set(v4().toString(), "");
+            const incomplete = new Map(group.incomplete);
+            incomplete.set(v4().toString(), "");
+
+            nextState.set(groupId, { ...group, incomplete });
             return nextState;
         }
         case "deleteTodoItem": {
@@ -25,7 +28,10 @@ export const todoManageReducer: TodoManageReducer = (state, action) => {
             const group = nextState.get(groupId);
             if (!group) break;
 
-            group.incomplete.delete(itemId);
+            const incomplete = new Map(group.incomplete);
+            incomplete.delete(itemId);
+
+            nextState.set(groupId, { ...group, incomplete });
             return nextState;
         }
         case "changeGroupName": {
@@ -33,7 +39,7 @@ export const todoManageReducer: TodoManageReducer = (state, action) => {
             const group = nextState.get(groupId);
             if (!group) break;
 
-            group.groupName = groupName;
+            nextState.set(groupId, { ...group, groupName });
             return nextState;
         }
         case "changeTodoItemText": {
@@ -41,7 +47,10 @@ export const todoManageReducer: TodoManageReducer = (state, action) => {
             const group = nextState.get(groupId);
             if (!group) break;
 
-            group.incomplete.set(itemId, text);
+            const incomplete = new Map(group.incomplete);
+            incomplete.set(itemId, text);
+
+            nextState.set(groupId, { ...group, incomplete });
             return nextState;
         }
         case "changeCompletionStatus": {
@@ -49,16 +58,22 @@ export const todoManageReducer: TodoManageReducer = (state, action) => {
             const group = nextState.get(groupId);
             if (!group) break;
 
-            if (isChecked && group.incomplete.has(itemId)) {
-                const itemText = group.incomplete.get(itemId)!;
-                group.incomplete.delete(itemId);
-                group.complete.set(itemId, itemText);
-            } else if (!isChecked && group.complete.has(itemId)) {
-                const itemText = group.complete.get(itemId)!;
-                group.complete.delete(itemId);
-                group.incomplete.set(itemId, itemText);
+            const complete = new Map(group.complete);
+            const incomplete = new Map(group.incomplete);
+
+            if (isChecked && incomplete.has(itemId)) {
+                const itemText = incomplete.get(itemId)!;
+                incomplete.delete(itemId);
+                complete.set(itemId, itemText);
+            } else if (!isChecked && complete.has(itemId)) {
+                const itemText = complete.get(itemId)!;
+                complete.delete(itemId);
+                incomplete.set(itemId, itemText);
+            } else {
+                break;
             }
 
+            nextState.set(groupId, { ...group, incomplete, complete });
             return nextState;
         }
         default: {

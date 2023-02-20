@@ -40,3 +40,5 @@ export const Checkbox: FC<CheckboxProps> = ({ checked: isChecked, disabled: isDi
         {isChecked && <div className={"checker"}></div>}
     </span>;
 };
+
+Checkbox.displayName = "Checkbox";

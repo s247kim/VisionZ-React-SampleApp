@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FC, KeyboardEventHandler } from "react";
+import { ChangeEventHandler, FC, KeyboardEventHandler, memo } from "react";
 
 import styles from "./todoGroup.styles.module.scss";
 import { TodoItemList } from "./todoItem";
@@ -13,12 +13,12 @@ type TodoGroupProps = TodoGroupType & {
  * 하지만 이 경우에는 하위에 리스팅된 모든 컴포넌트에 context 를 붙이는 것 보다 이런식으로 상위에서 골라 넘겨주는게 optimization 이 용이함
  * context 를 모든 하위 컴포넌트에 붙이면, re-render 를 막을 방도가 없음
  */
-export const TodoGroup: FC<TodoGroupProps> = ({
-                                                  groupId,
-                                                  groupName,
-                                                  complete,
-                                                  incomplete
-                                              }) => {
+export const TodoGroup: FC<TodoGroupProps> = memo(({
+                                                       groupId,
+                                                       groupName,
+                                                       complete,
+                                                       incomplete
+                                                   }) => {
     const todoManageAction = useTodoManageAction();
     const shouldAutoFocus = !groupName && !incomplete.size && !complete.size;
 
@@ -53,4 +53,6 @@ export const TodoGroup: FC<TodoGroupProps> = ({
             }
         </div>
     </article>;
-};
+});
+
+TodoGroup.displayName = "memo(TodoGroup)";

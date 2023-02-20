@@ -37,3 +37,5 @@ export const TodoItem = forwardRef<HTMLInputElement, TodoItemProps>(({
     return <input ref={ref} className={"todo-item-text"} value={itemText} autoFocus={autoFocus}
                   onChange={changeItemDetail} disabled={isCompleted} onBlur={deleteIfEmpty} onKeyDown={handleKeyDown}/>;
 });
+
+TodoItem.displayName = "forwardRef(TodoItem)";
