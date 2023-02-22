@@ -1,44 +1,34 @@
-import { FC, useState } from "react";
-import { v4 } from "uuid";
-
+import { FC, useContext, useCallback, useRef } from "react";
 import styles from "./todoGroupCollection.styles.module.scss";
 import { EmptyTodoGroup, TodoGroup } from "./todoGroup";
-import { TodoGroupType } from "./todoGroupCollection.types";
-
-const testData: TodoGroupType[] = [
-    {
-        groupId: v4().toString(),
-        groupTitle: "test1",
-        incompleteList: [{ itemId: v4().toString(), itemDetail: "test Incomplete" }, {
-            itemId: v4().toString(),
-            itemDetail: "test Incomplete2"
-        }],
-        completedList: [{ itemId: v4().toString(), itemDetail: "test Completed" }, {
-            itemId: v4().toString(),
-            itemDetail: "test Completed2"
-        }]
-    },
-    { groupId: v4().toString(), groupTitle: "test2", incompleteList: [], completedList: [] },
-    { groupId: v4().toString(), groupTitle: "test3", incompleteList: [], completedList: [] }
-];
+import { v4 } from "uuid";
+import { GlobalStoreContext } from "../context/globalContext";
 
 export const TodoGroupCollection: FC = () => {
-    const [groupDetails, setGroupDetails] = useState<TodoGroupType[]>(testData);
+  const { state, dispatch } = useContext(GlobalStoreContext);
+  // console.log(`state: ${Array.isArray(state)}`); // true
+  // const currentTodoGroupRef = useRef<TodoGroupType[] | null>(null);
 
-    const createNewGroup = () => {
-        setGroupDetails([...groupDetails, {
-            groupId: v4().toString(),
-            groupTitle: "",
-            incompleteList: [],
-            completedList: []
-        }]);
-    };
+  const createNewGroup = useCallback(() => {
+    dispatch({
+      type: "UPDATE_TODO_GROUP_DATA",
+      payload: {
+        groupId: v4().toString(),
+        groupTitle: "",
+        incompleteList: [],
+        completedList: [],
+      },
+    });
 
-    return <section className={styles.todoGroupCollection}>
-        {groupDetails.map((groupDetail) => {
-            return <TodoGroup key={groupDetail.groupId} {...groupDetail}
-                              setGroupDetails={setGroupDetails}/>;
-        })}
-        <EmptyTodoGroup handleClick={createNewGroup}/>
-    </section>;
+    // currentTodoGroupRef.current = groupDetails;
+  }, [dispatch]);
+
+  return (
+    <section className={styles.todoGroupCollection}>
+      {state.todoGroupCollectionData?.map((groupDetail) => {
+        return <TodoGroup key={v4().toString()} groupDetail={groupDetail} />;
+      })}
+      <EmptyTodoGroup handleClick={createNewGroup} />
+    </section>
+  );
 };
