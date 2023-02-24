@@ -1,4 +1,4 @@
-@use '../style-mixins/responsive';
+@use "../style-mixins/responsive";
 
 .mainPage {
   padding: 1.5rem;
@@ -14,4 +14,3 @@
     max-width: #{map-get(responsive.$width-map, "sm") * 3};
   }
 }
-

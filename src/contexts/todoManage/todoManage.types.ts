@@ -11,34 +11,43 @@ import { v4 } from "uuid";
  */
 export type TodoItemType = Map<string, string>;
 export type TodoGroupType = {
-    groupName: string;
-    incomplete: TodoItemType;
-    complete: TodoItemType;
+  groupName: string;
+  incomplete: TodoItemType;
+  complete: TodoItemType;
 };
 export type TodoManageStore = Map<string, TodoGroupType>;
 
 export type TodoManageAction =
-    | { type: "createNewGroup" }
-    | { type: "createNewItem", value: { groupId: string } }
-    | { type: "deleteTodoItem", value: { groupId: string, itemId: string } }
-    | { type: "changeGroupName", value: { groupId: string, groupName: string } }
-    | { type: "changeTodoItemText", value: { groupId: string, itemId: string, text: string } }
-    | { type: "changeCompletionStatus", value: { groupId: string, itemId: string, isChecked: boolean } }
+  | { type: "createNewGroup" }
+  | { type: "createNewItem"; value: { groupId: string } }
+  | { type: "deleteTodoItem"; value: { groupId: string; itemId: string } }
+  | { type: "changeGroupName"; value: { groupId: string; groupName: string } }
+  | { type: "changeTodoItemText"; value: { groupId: string; itemId: string; text: string }; }
+  | { type: "changeCompletionStatus"; value: { groupId: string; itemId: string; isChecked: boolean }; };
 
 export const initTodoManageStore = (): TodoManageStore => {
-    return new Map([
-        [v4().toString(), {
-            groupName: "Test1",
-            complete: new Map([
-                [v4().toString(), "complete"],
-                [v4().toString(), "complete2"],
-            ]),
-            incomplete: new Map([
-                [v4().toString(), "not complete"],
-                [v4().toString(), "not complete2"],
-            ])
-        }],
-        [v4().toString(), { groupName: "Test2", complete: new Map(), incomplete: new Map() }],
-        [v4().toString(), { groupName: "Test3", complete: new Map(), incomplete: new Map() }],
-    ]);
+  return new Map([
+    [
+      v4().toString(),
+      {
+        groupName: "Test1",
+        complete: new Map([
+          [v4().toString(), "complete"],
+          [v4().toString(), "complete2"],
+        ]),
+        incomplete: new Map([
+          [v4().toString(), "not complete"],
+          [v4().toString(), "not complete2"],
+        ]),
+      },
+    ],
+    [
+      v4().toString(),
+      { groupName: "Test2", complete: new Map(), incomplete: new Map() },
+    ],
+    [
+      v4().toString(),
+      { groupName: "Test3", complete: new Map(), incomplete: new Map() },
+    ],
+  ]);
 };

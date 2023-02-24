@@ -1,4 +1,8 @@
-$width-map: ("sm": 480px, "md": 720px, "lg": 1024px);
+$width-map: (
+        "sm": 480px,
+        "md": 720px,
+        "lg": 1024px,
+);
 
 @mixin width($width-key) {
   $width: map-get($width-map, $width-key);

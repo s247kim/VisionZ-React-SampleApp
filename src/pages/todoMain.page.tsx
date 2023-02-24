@@ -5,17 +5,19 @@ import { TodoGroupCollection } from "../components/todoGroupCollection";
 import { TodoManageProvider } from "../contexts/todoManage";
 
 export const TodoMainPage: FC = () => {
-    return (
-        <div className={styles.mainPage}>
-            <header>
-                <h1>VisionZ TODO APP</h1>
-            </header>
+  return (
+    <div className={styles.mainPage}>
+      <header>
+        <h1>VisionZ TODO APP</h1>
+      </header>
 
-            <main>
-                <TodoManageProvider>
-                    <TodoGroupCollection/>
-                </TodoManageProvider>
-            </main>
-        </div>
-    );
+      <main>
+        <TodoManageProvider>
+          <TodoGroupCollection/>
+        </TodoManageProvider>
+      </main>
+    </div>
+  );
 };
+
+TodoMainPage.displayName = "TodoMainPage";
